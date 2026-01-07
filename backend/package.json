@@ -8,7 +8,9 @@
     "dev": "nodemon server.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "node create-test-user.js"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
@@ -20,5 +22,15 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
-  }
+  },
+  "keywords": [
+    "trading",
+    "api",
+    "stocks",
+    "express",
+    "prisma",
+    "mysql"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }

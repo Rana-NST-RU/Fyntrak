@@ -1,8 +1,9 @@
 {
   "name": "fyntrak-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Fyntrak Trading Platform Frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -28,5 +29,15 @@
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
     "vite": "^5.0.8"
-  }
+  },
+  "keywords": [
+    "trading",
+    "react",
+    "vite",
+    "tailwindcss",
+    "stocks",
+    "frontend"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }

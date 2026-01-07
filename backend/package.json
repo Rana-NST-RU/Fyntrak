@@ -11,12 +11,12 @@
     "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@prisma/client": "^5.7.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "prisma": "^5.7.1",
-    "@prisma/client": "^5.7.1",
-    "yahoo-finance2": "^2.11.2"
+    "yahoo-finance2": "^3.11.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

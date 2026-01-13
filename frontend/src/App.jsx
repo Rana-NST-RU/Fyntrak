@@ -1,38 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Portfolio from './components/Portfolio';
 import Trade from './components/Trade';
-import { getUserData } from './services/api';
+import Transactions from './components/Transactions';
+import Login from './components/Login';
 
-function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // For demo purposes, using user ID 1
-  const userId = 1;
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const fetchUserData = async () => {
-    try {
-      setLoading(true);
-      const userData = await getUserData(userId);
-      setUser(userData);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const refreshUserData = () => {
-    fetchUserData();
-  };
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -42,6 +20,17 @@ function App() {
     );
   }
 
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
+const MainLayout = () => {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const { user, refreshUser } = useAuth();
+
   return (
     <div className="min-h-screen bg-dark-bg text-white">
       <Header user={user} />
@@ -49,17 +38,40 @@ function App() {
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         <main className="flex-1 p-6">
           {activeTab === 'dashboard' && (
-            <Dashboard user={user} refreshUserData={refreshUserData} />
+            <Dashboard user={user} refreshUserData={refreshUser} />
           )}
           {activeTab === 'portfolio' && (
-            <Portfolio user={user} refreshUserData={refreshUserData} />
+            <Portfolio user={user} refreshUserData={refreshUser} />
           )}
           {activeTab === 'trade' && (
-            <Trade user={user} refreshUserData={refreshUserData} />
+            <Trade user={user} refreshUserData={refreshUser} />
+          )}
+          {activeTab === 'transactions' && (
+            <Transactions />
           )}
         </main>
       </div>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <MainLayout />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

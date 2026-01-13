@@ -6,44 +6,71 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Market Data
+// Add a request interceptor to add the auth token to requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Auth
+export const loginUser = async (email, password) => {
+  const response = await api.post('/auth/login', { email, password });
+  return response.data;
+};
+
+export const registerUser = async (name, email, password) => {
+  const response = await api.post('/auth/register', { name, email, password });
+  return response.data;
+};
+
+export const getMe = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
+};
+
+// Market Data - Now using Trade Mock Price for form data
+export const getStockPrice = async (symbol) => {
+  const response = await api.get(`/trade/price/${symbol}`);
+  return response.data;
+};
+
+// Legacy mapping
 export const getStockQuote = async (symbol) => {
-  const response = await api.get(`/market/quote/${symbol}`);
-  return response.data;
+  return getStockPrice(symbol);
 };
 
-export const getStockHistory = async (symbol, period = '1mo') => {
-  const response = await api.get(`/market/history/${symbol}?period=${period}`);
-  return response.data;
-};
-
-// User Data
-export const getUserData = async (userId) => {
-  const response = await api.get(`/user/${userId}`);
-  return response.data;
-};
-
-export const createUser = async (email, name) => {
-  const response = await api.post('/user/create', { email, name });
+export const getStockHistory = async (symbol, days = 30) => {
+  const response = await api.get(`/trade/history/${symbol}?days=${days}`);
   return response.data;
 };
 
 // Trading
-export const buyStock = async (userId, symbol, quantity) => {
+export const buyStock = async (symbol, quantity) => {
   const response = await api.post('/trade/buy', {
-    userId,
     symbol,
     quantity
   });
   return response.data;
 };
 
-export const sellStock = async (userId, symbol, quantity) => {
+export const sellStock = async (symbol, quantity) => {
   const response = await api.post('/trade/sell', {
-    userId,
     symbol,
     quantity
   });
+  return response.data;
+};
+
+export const getTransactions = async () => {
+  const response = await api.get('/trade/history');
   return response.data;
 };
 

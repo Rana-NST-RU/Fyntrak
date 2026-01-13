@@ -16,50 +16,50 @@ const Portfolio = ({ user, refreshUserData }) => {
   const totalProfitLossPercent = totalInvested > 0 ? (totalProfitLoss / totalInvested) * 100 : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-fade-in">
       <div>
         <h2 className="text-3xl font-bold text-white mb-2">Portfolio</h2>
-        <p className="text-gray-400">Manage your stock holdings</p>
+        <p className="text-text-secondary">Manage your stock holdings and track performance</p>
       </div>
 
       {/* Portfolio Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-dark-card rounded-lg p-6 border border-dark-border">
+        <div className="glass-card rounded-2xl p-6 transition-transform hover:scale-[1.02]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">Total Invested</p>
+              <p className="text-sm font-medium text-text-secondary mb-1">Total Invested</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(totalInvested)}</p>
             </div>
-            <div className="p-3 rounded-full bg-blue-500/10">
+            <div className="p-3 rounded-xl bg-blue-500/10">
               <Briefcase className="h-6 w-6 text-blue-500" />
             </div>
           </div>
         </div>
 
-        <div className="bg-dark-card rounded-lg p-6 border border-dark-border">
+        <div className="glass-card rounded-2xl p-6 transition-transform hover:scale-[1.02]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">Current Value</p>
+              <p className="text-sm font-medium text-text-secondary mb-1">Current Value</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(totalCurrentValue)}</p>
             </div>
-            <div className="p-3 rounded-full bg-purple-500/10">
+            <div className="p-3 rounded-xl bg-purple-500/10">
               <TrendingUp className="h-6 w-6 text-purple-500" />
             </div>
           </div>
         </div>
 
-        <div className="bg-dark-card rounded-lg p-6 border border-dark-border">
+        <div className="glass-card rounded-2xl p-6 transition-transform hover:scale-[1.02]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">Total P&L</p>
+              <p className="text-sm font-medium text-text-secondary mb-1">Total P&L</p>
               <p className={`text-2xl font-bold ${totalProfitLoss >= 0 ? 'text-profit' : 'text-loss'}`}>
                 {formatCurrency(totalProfitLoss)}
               </p>
-              <p className={`text-sm ${totalProfitLoss >= 0 ? 'text-profit' : 'text-loss'}`}>
+              <p className={`text-sm mt-1 font-medium ${totalProfitLoss >= 0 ? 'text-profit' : 'text-loss'}`}>
                 {totalProfitLossPercent.toFixed(2)}%
               </p>
             </div>
-            <div className={`p-3 rounded-full ${totalProfitLoss >= 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
+            <div className={`p-3 rounded-xl ${totalProfitLoss >= 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
               {totalProfitLoss >= 0 ? (
                 <TrendingUp className="h-6 w-6 text-profit" />
               ) : (
@@ -72,41 +72,39 @@ const Portfolio = ({ user, refreshUserData }) => {
 
       {/* Holdings Table */}
       {portfolios.length > 0 ? (
-        <div className="bg-dark-card rounded-lg border border-dark-border overflow-hidden">
-          <div className="px-6 py-4 border-b border-dark-border">
-            <h3 className="text-xl font-semibold text-white">Your Holdings</h3>
+        <div className="glass-panel rounded-2xl overflow-hidden border border-white/5">
+          <div className="px-6 py-5 border-b border-white/5 bg-white/5">
+            <h3 className="text-xl font-bold text-white">Your Holdings</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-800/50">
-                <tr>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">Symbol</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">Quantity</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">Avg Buy Price</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">Current Price</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">Current Value</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">P&L</th>
-                  <th className="text-left py-4 px-6 text-gray-400 font-medium">P&L %</th>
+              <thead>
+                <tr className="bg-dark-bg/50 border-b border-white/5">
+                  <th className="text-left py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">Symbol</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">Quantity</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">Avg Buy Price</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">Current Price</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">Current Value</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">P&L</th>
+                  <th className="text-right py-4 px-6 text-text-secondary text-xs uppercase tracking-wider font-semibold">P&L %</th>
                 </tr>
               </thead>
               <tbody>
                 {portfolios.map((portfolio, index) => (
-                  <tr key={index} className="border-b border-dark-border/50 hover:bg-gray-800/30">
+                  <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                     <td className="py-4 px-6">
-                      <div className="font-medium text-white">{portfolio.symbol}</div>
+                      <div className="font-bold text-white tracking-wide">{portfolio.symbol}</div>
                     </td>
-                    <td className="py-4 px-6 text-gray-300">{portfolio.quantity}</td>
-                    <td className="py-4 px-6 text-gray-300">{formatCurrency(portfolio.averageBuyPrice)}</td>
-                    <td className="py-4 px-6 text-gray-300">{formatCurrency(portfolio.currentPrice || 0)}</td>
-                    <td className="py-4 px-6 text-gray-300">{formatCurrency(portfolio.currentValue || 0)}</td>
-                    <td className={`py-4 px-6 font-medium ${
-                      (portfolio.profitLoss || 0) >= 0 ? 'text-profit' : 'text-loss'
-                    }`}>
+                    <td className="py-4 px-6 text-right text-gray-300 font-mono">{portfolio.quantity}</td>
+                    <td className="py-4 px-6 text-right text-gray-300 font-mono">{formatCurrency(portfolio.averageBuyPrice)}</td>
+                    <td className="py-4 px-6 text-right text-white font-medium font-mono">{formatCurrency(portfolio.currentPrice || 0)}</td>
+                    <td className="py-4 px-6 text-right text-white font-bold font-mono">{formatCurrency(portfolio.currentValue || 0)}</td>
+                    <td className={`py-4 px-6 text-right font-medium font-mono ${(portfolio.profitLoss || 0) >= 0 ? 'text-profit' : 'text-loss'
+                      }`}>
                       {formatCurrency(portfolio.profitLoss || 0)}
                     </td>
-                    <td className={`py-4 px-6 font-medium ${
-                      (portfolio.profitLossPercent || 0) >= 0 ? 'text-profit' : 'text-loss'
-                    }`}>
+                    <td className={`py-4 px-6 text-right font-medium font-mono ${(portfolio.profitLossPercent || 0) >= 0 ? 'text-profit' : 'text-loss'
+                      }`}>
                       {(portfolio.profitLossPercent || 0).toFixed(2)}%
                     </td>
                   </tr>
@@ -116,13 +114,15 @@ const Portfolio = ({ user, refreshUserData }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-dark-card rounded-lg p-12 border border-dark-border text-center">
-          <Briefcase className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-2xl font-semibold text-white mb-2">No Holdings</h3>
-          <p className="text-gray-400 mb-6">You haven't made any trades yet. Start trading to build your portfolio.</p>
-          <button 
+        <div className="glass-panel rounded-2xl p-16 text-center border border-white/5">
+          <div className="h-20 w-20 bg-dark-bg rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-lg">
+            <Briefcase className="h-10 w-10 text-text-secondary" />
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2">No Holdings</h3>
+          <p className="text-text-secondary mb-8 max-w-md mx-auto">You haven't made any trades yet. Start trading to build your portfolio and track your wealth.</p>
+          <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
+            className="bg-primary hover:bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/20 hover:scale-105"
           >
             Refresh Portfolio
           </button>

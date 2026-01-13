@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, DollarSign, Briefcase } from 'lucide-react';
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, refreshUserData }) => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -26,8 +26,8 @@ const Dashboard = ({ user }) => {
       title: 'Available Cash',
       value: formatCurrency(user?.balance || 0),
       icon: DollarSign,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10'
+      color: 'text-emerald-500',
+      bgColor: 'bg-emerald-500/10'
     },
     {
       title: 'Portfolio Value',
@@ -47,10 +47,10 @@ const Dashboard = ({ user }) => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-fade-in">
       <div>
         <h2 className="text-3xl font-bold text-white mb-2">Dashboard</h2>
-        <p className="text-gray-400">Overview of your trading portfolio</p>
+        <p className="text-text-secondary">Overview of your trading portfolio</p>
       </div>
 
       {/* Stats Grid */}
@@ -58,16 +58,16 @@ const Dashboard = ({ user }) => {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-dark-card rounded-lg p-6 border border-dark-border">
+            <div key={index} className="glass-card rounded-2xl p-6 transition-all duration-300 hover:transform hover:translate-y-[-4px]">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-400">{stat.title}</p>
-                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                  <p className="text-sm font-medium text-text-secondary mb-1">{stat.title}</p>
+                  <p className={`text-2xl font-bold text-white`}>{stat.value}</p>
                   {stat.subtitle && (
-                    <p className={`text-sm ${stat.color}`}>{stat.subtitle}</p>
+                    <p className={`text-sm mt-1 font-medium ${stat.color}`}>{stat.subtitle}</p>
                   )}
                 </div>
-                <div className={`p-3 rounded-full ${stat.bgColor}`}>
+                <div className={`p-3 rounded-xl ${stat.bgColor}`}>
                   <Icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>
@@ -78,32 +78,44 @@ const Dashboard = ({ user }) => {
 
       {/* Recent Holdings */}
       {user?.portfolios && user.portfolios.length > 0 && (
-        <div className="bg-dark-card rounded-lg p-6 border border-dark-border">
-          <h3 className="text-xl font-semibold text-white mb-4">Your Holdings</h3>
+        <div className="glass-panel rounded-2xl p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-bold text-white">Your Holdings</h3>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-dark-border">
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Symbol</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Quantity</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Avg Price</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Current Price</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">P&L</th>
+                <tr className="border-b border-white/5">
+                  <th className="text-left py-4 px-4 text-text-secondary text-sm font-medium uppercase tracking-wider">Symbol</th>
+                  <th className="text-right py-4 px-4 text-text-secondary text-sm font-medium uppercase tracking-wider">Quantity</th>
+                  <th className="text-right py-4 px-4 text-text-secondary text-sm font-medium uppercase tracking-wider">Avg Price</th>
+                  <th className="text-right py-4 px-4 text-text-secondary text-sm font-medium uppercase tracking-wider">Current Price</th>
+                  <th className="text-right py-4 px-4 text-text-secondary text-sm font-medium uppercase tracking-wider">P&L</th>
                 </tr>
               </thead>
               <tbody>
                 {user.portfolios.slice(0, 5).map((portfolio, index) => (
-                  <tr key={index} className="border-b border-dark-border/50">
-                    <td className="py-3 px-4 text-white font-medium">{portfolio.symbol}</td>
-                    <td className="py-3 px-4 text-gray-300">{portfolio.quantity}</td>
-                    <td className="py-3 px-4 text-gray-300">{formatCurrency(portfolio.averageBuyPrice)}</td>
-                    <td className="py-3 px-4 text-gray-300">{formatCurrency(portfolio.currentPrice || 0)}</td>
-                    <td className={`py-3 px-4 font-medium ${
-                      (portfolio.profitLoss || 0) >= 0 ? 'text-profit' : 'text-loss'
-                    }`}>
-                      {formatCurrency(portfolio.profitLoss || 0)}
-                      <span className="text-sm ml-1">
-                        ({(portfolio.profitLossPercent || 0).toFixed(2)}%)
+                  <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                    <td className="py-4 px-4 text-white font-semibold">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-8 w-8 rounded-lg bg-dark-bg flex items-center justify-center text-xs font-bold text-text-secondary border border-white/5">
+                          {portfolio.symbol.substring(0, 2)}
+                        </div>
+                        <span>{portfolio.symbol}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 text-right text-gray-300">{portfolio.quantity}</td>
+                    <td className="py-4 px-4 text-right text-gray-300">{formatCurrency(portfolio.averageBuyPrice)}</td>
+                    <td className="py-4 px-4 text-right text-white font-medium">{formatCurrency(portfolio.currentPrice || 0)}</td>
+                    <td className={`py-4 px-4 text-right font-bold ${(portfolio.profitLoss || 0) >= 0 ? 'text-profit' : 'text-loss'
+                      }`}>
+                      <div className="flex items-center justify-end space-x-1">
+                        {(portfolio.profitLoss || 0) >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                        <span>{formatCurrency(portfolio.profitLoss || 0)}</span>
+                      </div>
+                      <span className={`text-xs block mt-0.5 opacity-80`}>
+                        {(portfolio.profitLossPercent || 0).toFixed(2)}%
                       </span>
                     </td>
                   </tr>
@@ -115,11 +127,13 @@ const Dashboard = ({ user }) => {
       )}
 
       {(!user?.portfolios || user.portfolios.length === 0) && (
-        <div className="bg-dark-card rounded-lg p-8 border border-dark-border text-center">
-          <Briefcase className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-white mb-2">No Holdings Yet</h3>
-          <p className="text-gray-400 mb-4">Start trading to build your portfolio</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+        <div className="glass-panel rounded-2xl p-12 text-center">
+          <div className="h-16 w-16 bg-dark-bg rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
+            <Briefcase className="h-8 w-8 text-text-secondary" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">No Holdings Yet</h3>
+          <p className="text-text-secondary mb-6 max-w-md mx-auto">Your portfolio is empty. Search for stocks and start trading to build your wealth.</p>
+          <button className="bg-primary hover:bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/20">
             Start Trading
           </button>
         </div>
